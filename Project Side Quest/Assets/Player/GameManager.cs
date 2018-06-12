@@ -114,12 +114,21 @@ public class GameManager : MonoBehaviour {
 
     void DropInfluence(int amountToDrop)
     {
+		//Drop Influence Objects
+		for (int i = 0; i < amountToDrop; i++) {
+			Instantiate (Resources.Load ("Pickups/InfluencePickup") as GameObject, new Vector3 (Random.Range(-1, 1), Random.Range(2.5f, 3.5f), 0), Quaternion.identity);
+		}
+
         influence += amountToDrop;
     }
 
     public void DropGold(float amountToDrop)
     {
         //Drop Gold Objects
+		for (int i = 0; i < amountToDrop; i++) {
+			Instantiate (Resources.Load ("Pickups/GoldPickup") as GameObject, new Vector3 (Random.Range(-1, 1), Random.Range(2.5f, 3.5f), 0), Quaternion.identity);
+		}
+
         gold += (int)amountToDrop;
     }
 
