@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class PickupClass : MonoBehaviour {
 
-	public float pickupValue;
-	public int pickupType; //1 = Influence; 2 = Gold
+	protected int pickupValue;
+    protected GameManager gameManager;
 
-	void Start()
+	public void Init(int currentLevel, GameManager manager)
 	{
+        gameManager = manager;
 
+        pickupValue = Random.Range(20, 40) * currentLevel;
 	}
+
+    protected virtual void OnMouseDown()
+    {
+    }
 
 }
