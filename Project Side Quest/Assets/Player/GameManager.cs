@@ -103,10 +103,10 @@ public class GameManager : MonoBehaviour {
         activeBoss = null;
 
         //Drop Influence
-        DropInfluence(50 * (currentLevel + 1));
+        DropInfluence(10 * (currentLevel + 1));
         
         //Drop Gold
-        DropGold(20 * (currentLevel + 1));
+        DropGold(10 * (currentLevel + 1));
 
         IncreaseLevel();
 
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour {
     {
 		//Drop Influence Objects
 		for (int i = 0; i < amountToDrop; i++) {
-			Instantiate (Resources.Load ("Pickups/InfluencePickup") as GameObject, new Vector3 (Random.Range(-1, 1), Random.Range(2.5f, 3.5f), 0), Quaternion.identity);
+			Instantiate (Resources.Load ("Pickups/InfluencePickup") as GameObject, new Vector3 (Random.Range(-1.0f, 1.0f), Random.Range(0.5f, 2.5f), 0), Quaternion.identity).GetComponent<InfluencePickups>().Init(currentLevel, this);
 		}
     }
 
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour {
     {
         //Drop Gold Objects
 		for (int i = 0; i < amountToDrop; i++) {
-			Instantiate (Resources.Load ("Pickups/GoldPickup") as GameObject, new Vector3 (Random.Range(-1, 1), Random.Range(2.5f, 3.5f), 0), Quaternion.identity);
+			Instantiate (Resources.Load ("Pickups/GoldPickup") as GameObject, new Vector3 (Random.Range(-1.0f, 1.0f), Random.Range(0.5f, 2.5f), 0), Quaternion.identity).GetComponent<GoldPickups>().Init(currentLevel, this);
 		}
     }
 
