@@ -41,10 +41,10 @@ public class GameManager : MonoBehaviour {
 
         //Spawn Lanes
         activeLanes.Add(Instantiate(Resources.Load("Characters/WarriorLane") as GameObject, new Vector3(0, -0.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/WizardLane") as GameObject, new Vector3(-1.5f, -2, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/RogueLane") as GameObject, new Vector3(1.5f, -2, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/ClericLane") as GameObject, new Vector3(-1.5f, -4, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/RangerLane") as GameObject, new Vector3(1.5f, -4, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/WizardLane") as GameObject, new Vector3(-1.5f, -1.8f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/RogueLane") as GameObject, new Vector3(1.5f, -1.8f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/ClericLane") as GameObject, new Vector3(-1.5f, -3.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/RangerLane") as GameObject, new Vector3(1.5f, -3.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
 
         laneCount = 5;
 
@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour {
         //Drop Influence
         DropInfluence(50 * (currentLevel + 1));
         
+        //Drop Gold
         DropGold(20 * (currentLevel + 1));
 
         IncreaseLevel();
