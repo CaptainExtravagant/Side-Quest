@@ -11,7 +11,7 @@ public class PickupClass : MonoBehaviour {
 	{
         gameManager = manager;
 
-        pickupValue = Random.Range(1, 10) * currentLevel;
+        pickupValue = Random.Range(1, 10) * (currentLevel + 1);
 	}
 
     protected virtual void OnMouseDown()

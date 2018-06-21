@@ -9,7 +9,7 @@ public class BaseLaneClass : MonoBehaviour {
     private bool isAlive = true;
 
     private int characterCount = 1;
-    private int upgradeLevel = 0;
+    private int upgradeLevel = 1;
 
     protected float totalHealth;
     protected float baseHealth = 20;
@@ -99,18 +99,24 @@ public class BaseLaneClass : MonoBehaviour {
         attackTimer = 0;
 
         characterCount = 1;
+        upgradeLevel = 1;
 
         SetStats();
     }
 
     public void LevelUp()
     {
-        SetStats();
+        if (!isAlive)
+            ResetStats();
+        else
+            SetStats();
     }
 
     public void Upgrade()
     {
         //Upgrade Character
+        upgradeLevel++;
+
         healthModifier += 0.2f;
         damageModifier += 0.2f;
         resistanceModifier += 0.2f;
@@ -150,29 +156,40 @@ public class BaseLaneClass : MonoBehaviour {
     {
         return upgradeLevel;
     }
-    
-    public void Damage(float damage)
+
+    public float GetSingleHealth()
     {
-        //Dodge Chance
-        if (Random.Range(0, 99) > currentDodge)
+        return singleHealth;
+    }
+    
+    public bool Damage(float damage)
+    {
+        if (isAlive)
         {
-
-            Debug.Log("Lane Damaged");
-
-            singleHealth -= damage;
-            currentHealth -= damage;
-
-            CheckHealth();
-
-            if (CheckLaneStatus())
+            //Dodge Chance
+            if (Random.Range(0, 99) > currentDodge)
             {
-                Debug.Log("Lane Destroyed");
-                isAlive = false;
-                gameManager.LaneDestroyed();
+
+                Debug.Log("Lane Damaged");
+
+                singleHealth -= damage;
+                currentHealth -= damage;
+
+                //Update Lane UI
+
+                //CheckHealth();
+                //CheckLaneStatus();
+
+                return true;
+            }
+            else
+            {
+                Debug.Log("Lane Dodged!");
+                return false;
             }
         }
-        else
-            Debug.Log("Lane Dodged!");
+        return false;
+
     }
 
     public void AddMobs(int mobCount)
@@ -181,24 +198,30 @@ public class BaseLaneClass : MonoBehaviour {
             activeMobs += mobCount;
     }
 
-    private void CheckHealth()
+    public bool CheckHealth()
     {
-        if(singleHealth <= 0)
-        {
-            characterCount--;
-            singleHealth = baseHealth * healthModifier;
-            currentDamage = (baseDamage * damageModifier) * characterCount;
-        }
+     characterCount--;
+     singleHealth = baseHealth * healthModifier;
+     currentDamage = (baseDamage * damageModifier) * characterCount;
+
+     return CheckLaneStatus();
     }
 
-    private bool CheckLaneStatus()
+    public bool CheckLaneStatus()
     {
         if(characterCount <= 0)
         {
+            Debug.Log("Lane Destroyed");
+            isAlive = false;
             return true;
         }
 
         return false;
+    }
+
+    public bool IsAlive()
+    {
+        return isAlive;
     }
 
     private void SetManager(GameManager manager)
@@ -220,7 +243,7 @@ public class BaseLaneClass : MonoBehaviour {
 
         currentSpeed = baseSpeed / attackSpeedModifier;
 
-        isAlive = true;
+        isAlive = true;        
     }
 
     public void Heal(float heal)

@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
     float mobSpawnTime = 40;
     float spawnTimer;
 
+    UIManager uiManager;
+
     private void Start()
     {
         Init();
@@ -52,6 +54,9 @@ public class GameManager : MonoBehaviour {
         {
             activeLanes[i].Init(this);
         }
+
+        uiManager = Instantiate(Resources.Load("UI/InGameUI") as GameObject).GetComponent<UIManager>();
+        uiManager.Init(this);
 
         CreateBoss();
     }
@@ -90,11 +95,23 @@ public class GameManager : MonoBehaviour {
         }
 
         activeBoss.Init(this);
+
+        uiManager.NewBoss((int)activeBoss.GetMaxHealth());
+    }
+
+    public UIManager GetUIManager()
+    {
+        return uiManager;
     }
 
     public int GetCurrentLevel()
     {
         return currentLevel;
+    }
+
+    public BaseBossClass GetCurrentBoss()
+    {
+        return activeBoss;
     }
 
     public void BossDefeated()
@@ -132,11 +149,13 @@ public class GameManager : MonoBehaviour {
     public void AddGold(int add)
     {
         gold += add;
+        uiManager.UpdateGoldCount(gold);
     }
 
     public void AddInfluence(int add)
     {
         influence += add;
+        uiManager.UpdateInfluenceCount(influence);
     }
 
     void IncreaseLevel()
@@ -146,34 +165,68 @@ public class GameManager : MonoBehaviour {
 
         for (int i = 0; i < activeLanes.Count; i++)
         {
+            if(!activeLanes[i].IsAlive())
+                uiManager.ResetLane(i);
+
             activeLanes[i].LevelUp();
+            uiManager.UpdateLaneHealth(i, activeLanes[i].GetSingleHealth());
         }
 
         laneCount = activeLanes.Count;
     }
 
+    public BaseLaneClass GetLane(int lane)
+    {
+        return activeLanes[lane];
+    }
+
     public void UpgradeLane(int lane)
     {
-        if (gold >= (activeLanes[lane].GetUpgradeLevel() * 100))
+        if (gold >= (activeLanes[lane].GetUpgradeLevel() * 100) && activeLanes[lane].IsAlive())
         {
             gold -= activeLanes[lane].GetUpgradeLevel() * 100;
             activeLanes[lane].Upgrade();
+
+            uiManager.UpdateLaneValue(lane, 1, activeLanes[lane].GetUpgradeLevel() * 100);
+            uiManager.UpdateGoldCount(gold);
+
+            uiManager.LaneUpgraded(lane, activeLanes[lane].GetUpgradeLevel(), activeLanes[lane].GetSingleHealth());
         }
     }
 
     public void EmployLane(int lane)
     {
-        if(influence >= (activeLanes[lane].GetCharacterCount() * 200))
+        if(influence >= (activeLanes[lane].GetCharacterCount() * 200) && activeLanes[lane].IsAlive())
         {
             influence -= activeLanes[lane].GetCharacterCount() * 200;
             activeLanes[lane].Employ();
+
+            uiManager.UpdateLaneValue(lane, 0, activeLanes[lane].GetCharacterCount() * 200);
+            uiManager.UpdateInfluenceCount(influence);
+
+            uiManager.LaneEmployed(lane);
         }
     }
 
     public void DamageLane(int lane, float damage)
     {
-        if(activeLanes[lane])
-            activeLanes[lane].Damage(damage);
+        //Deal Damage
+        if (activeLanes[lane].IsAlive())
+        {
+            if (activeLanes[lane].Damage(damage))
+            {
+                if (activeLanes[lane].GetSingleHealth() <= 0)
+                {
+                    //Check Current Health
+                    uiManager.LaneCharacterLost(lane, activeLanes[lane].CheckHealth());
+                }
+
+                uiManager.UpdateLaneHealth(lane, activeLanes[lane].GetSingleHealth());
+
+                LaneDestroyed(lane);
+            }
+        }
+        
     }
 
     public void AddMobs(int lane, int mobCount)
@@ -182,10 +235,14 @@ public class GameManager : MonoBehaviour {
             activeLanes[lane].AddMobs(mobCount);
     }
 
-    public void LaneDestroyed()
+    public void LaneDestroyed(int lane)
     {
         laneCount--;
-        if(laneCount <= 0)
+        if(activeLanes[0].IsAlive() == false &&
+            activeLanes[1].IsAlive() == false &&
+            activeLanes[2].IsAlive() == false &&
+            activeLanes[3].IsAlive() == false &&
+            activeLanes[4].IsAlive() == false)
         {
             //Game Over
             ResetGame();
@@ -204,7 +261,13 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < activeLanes.Count; i++)
         {
             activeLanes[i].ResetStats();
+            uiManager.ResetLane(i);
         }
+
+        gold /= 2;
+        influence /= 2;
+
+        uiManager.LevelReset(gold, influence);
 
         currentLevel = 0;
         CreateBoss();
@@ -219,5 +282,10 @@ public class GameManager : MonoBehaviour {
     {
         Debug.Log("Character Damage Boss");
         activeBoss.TakeDamage(damage);
+    }
+
+    public void UpdateBossHealth()
+    {
+        uiManager.UpdateBossCurrentHealth(activeBoss.GetCurrentHealth());
     }
 }

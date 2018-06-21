@@ -11,6 +11,7 @@ public class BaseBossClass : MonoBehaviour {
     protected float healthModifier = 1.0f;
 
     private float currentHealth;
+    private float maxHealth;
 
     protected float baseAttack = 10;
     protected float attackModifier = 1.0f;
@@ -79,8 +80,20 @@ public class BaseBossClass : MonoBehaviour {
     public void SetStats()
     {
         currentHealth = baseHealth * healthModifier;
+        maxHealth = currentHealth;
+
         currentAttack = baseAttack * attackModifier;
         currentSpecial = specialTime * specialModifier;
+    }
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
     }
 
     public void SetGameManager(GameManager manager)
@@ -102,6 +115,8 @@ public class BaseBossClass : MonoBehaviour {
     public void TakeDamage(float damage)
     {        
         currentHealth -= damage;
+
+        gameManager.UpdateBossHealth();
 
         if (CheckHealth())
             gameManager.BossDefeated();
