@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class GoldPickups : PickupClass {
 
-    protected override void OnMouseDown()
+    protected override void Pickup()
     {
         pickupValue *= 20;
-        gameManager.AddGold(pickupValue);
-
-        base.OnMouseDown();
+        gameManager.AddGold(pickupValue);        
     }
 
 }

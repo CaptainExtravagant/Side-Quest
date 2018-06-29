@@ -14,9 +14,15 @@ public class PickupClass : MonoBehaviour {
         pickupValue = Random.Range(1, 10) * (currentLevel + 1);
 	}
 
-    protected virtual void OnMouseDown()
+    private void OnMouseDown()
     {
+        Pickup();
         Destroy(gameObject);
+    }
+
+    protected virtual void Pickup()
+    {
+
     }
 
 }

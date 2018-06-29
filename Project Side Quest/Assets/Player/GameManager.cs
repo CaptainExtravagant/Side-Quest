@@ -8,6 +8,12 @@ public class GameManager : MonoBehaviour {
     private List<BaseLaneClass> activeLanes = new List<BaseLaneClass>();
     private int laneCount = 0;
 
+    public enum CURRENCY
+    {
+        INFLUENCE = 0,
+        GOLD
+    };
+
     private int influence = 0;
     private int gold = 0;
 
@@ -16,6 +22,10 @@ public class GameManager : MonoBehaviour {
 
     float mobSpawnTime = 40;
     float spawnTimer;
+
+    float bossSpawnTime = 5;
+    float bossSpawnTimer;
+    bool bossSpawned = true;
 
     UIManager uiManager;
 
@@ -32,6 +42,16 @@ public class GameManager : MonoBehaviour {
         {
             activeLanes[Random.Range(0, 4)].AddMobs(10 * (currentLevel + 1));
         }
+
+        if (!bossSpawned)
+        {
+            bossSpawnTimer += Time.deltaTime;
+            if (bossSpawnTimer >= bossSpawnTime)
+            {
+                bossSpawned = true;
+                CreateBoss();
+            }
+        }
     }
 
     void Init()
@@ -41,23 +61,27 @@ public class GameManager : MonoBehaviour {
 
         currentLevel = 0;
 
+
         //Spawn Lanes
         activeLanes.Add(Instantiate(Resources.Load("Characters/WarriorLane") as GameObject, new Vector3(0, -0.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/WizardLane") as GameObject, new Vector3(-1.5f, -1.8f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/RogueLane") as GameObject, new Vector3(1.5f, -1.8f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/ClericLane") as GameObject, new Vector3(-1.5f, -3.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
-        activeLanes.Add(Instantiate(Resources.Load("Characters/RangerLane") as GameObject, new Vector3(1.5f, -3.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/WizardLane") as GameObject, new Vector3(-1.75f, -1.8f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/RogueLane") as GameObject, new Vector3(1.75f, -1.8f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/ClericLane") as GameObject, new Vector3(-1.75f, -3.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
+        activeLanes.Add(Instantiate(Resources.Load("Characters/RangerLane") as GameObject, new Vector3(1.75f, -3.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
 
         laneCount = 5;
-
-        for (int i = 0; i < activeLanes.Count; i++)
-        {
-            activeLanes[i].Init(this);
-        }
 
         uiManager = Instantiate(Resources.Load("UI/InGameUI") as GameObject).GetComponent<UIManager>();
         uiManager.Init(this);
 
+        uiManager.InitLaneUI();
+
+        for (int i = 0; i < activeLanes.Count; i++)
+        {
+            activeLanes[i].Init(this, uiManager.GetLaneUI(i));
+        }
+
+        
         CreateBoss();
     }
 
@@ -119,15 +143,19 @@ public class GameManager : MonoBehaviour {
         Destroy(activeBoss.gameObject);
         activeBoss = null;
 
+        bossSpawned = false;
+
         //Drop Influence
-        DropInfluence(10 * (currentLevel + 1));
+        DropInfluence(currentLevel + 1);
         
         //Drop Gold
-        DropGold(10 * (currentLevel + 1));
+        DropGold(currentLevel + 1);
 
         IncreaseLevel();
 
-        CreateBoss();
+        bossSpawnTimer = 0;
+
+        uiManager.NoBoss();
     }
 
     void DropInfluence(int amountToDrop)
@@ -169,7 +197,6 @@ public class GameManager : MonoBehaviour {
                 uiManager.ResetLane(i);
 
             activeLanes[i].LevelUp();
-            uiManager.UpdateLaneHealth(i, activeLanes[i].GetSingleHealth());
         }
 
         laneCount = activeLanes.Count;
@@ -186,11 +213,8 @@ public class GameManager : MonoBehaviour {
         {
             gold -= activeLanes[lane].GetUpgradeLevel() * 100;
             activeLanes[lane].Upgrade();
-
-            uiManager.UpdateLaneValue(lane, 1, activeLanes[lane].GetUpgradeLevel() * 100);
-            uiManager.UpdateGoldCount(gold);
-
-            uiManager.LaneUpgraded(lane, activeLanes[lane].GetUpgradeLevel(), activeLanes[lane].GetSingleHealth());
+            
+            uiManager.UpdateGoldCount(gold);                        
         }
     }
 
@@ -200,11 +224,8 @@ public class GameManager : MonoBehaviour {
         {
             influence -= activeLanes[lane].GetCharacterCount() * 200;
             activeLanes[lane].Employ();
-
-            uiManager.UpdateLaneValue(lane, 0, activeLanes[lane].GetCharacterCount() * 200);
-            uiManager.UpdateInfluenceCount(influence);
-
-            uiManager.LaneEmployed(lane);
+                        
+            uiManager.UpdateInfluenceCount(influence);            
         }
     }
 
@@ -213,18 +234,7 @@ public class GameManager : MonoBehaviour {
         //Deal Damage
         if (activeLanes[lane].IsAlive())
         {
-            if (activeLanes[lane].Damage(damage))
-            {
-                if (activeLanes[lane].GetSingleHealth() <= 0)
-                {
-                    //Check Current Health
-                    uiManager.LaneCharacterLost(lane, activeLanes[lane].CheckHealth());
-                }
-
-                uiManager.UpdateLaneHealth(lane, activeLanes[lane].GetSingleHealth());
-
-                LaneDestroyed(lane);
-            }
+            activeLanes[lane].Damage(damage);
         }
         
     }
@@ -280,8 +290,11 @@ public class GameManager : MonoBehaviour {
 
     public void DamageBoss(float damage)
     {
-        Debug.Log("Character Damage Boss");
-        activeBoss.TakeDamage(damage);
+        if (bossSpawned)
+        {
+            Debug.Log("Character Damage Boss");
+            activeBoss.TakeDamage(damage);
+        }
     }
 
     public void UpdateBossHealth()

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BaseLaneClass : MonoBehaviour {
 
-    private GameManager gameManager;
+    protected GameManager gameManager;
+    private LaneUI laneUI;
 
     private bool isAlive = true;
 
@@ -42,12 +43,17 @@ public class BaseLaneClass : MonoBehaviour {
 
     private bool isFrozen = false;
 
-    public virtual void Init(GameManager manager)
+    protected bool abilityCooldown = false;
+    private float abilityTimer;
+
+    public virtual void Init(GameManager manager, LaneUI ui)
     {
         SetManager(manager);
+        laneUI = ui;
         SetStats();
+        abilityTimer = currentSpeed;
         isAlive = true;
-    }
+    }    
 
     private void Update()
     {
@@ -61,11 +67,7 @@ public class BaseLaneClass : MonoBehaviour {
                 {
                     if (activeMobs > 0)
                     {
-                        activeMobs -= (int)currentDamage;
-                        gameManager.DropGold(currentDamage);
-
-                        if (activeMobs < 0)
-                            activeMobs = 0;
+                        DamageMobs((int)currentDamage);
                     }
                     else
                     {
@@ -73,7 +75,19 @@ public class BaseLaneClass : MonoBehaviour {
                     }
                     attackTimer = 0;
                 }
+
+                if (abilityCooldown)
+                {
+                    abilityTimer -= Time.deltaTime;
+                    laneUI.UpdateCooldown(abilityTimer / currentSpeed);
+                    if (abilityTimer <= 0)
+                    {
+                        abilityCooldown = false;
+                        abilityTimer = currentSpeed;
+                    }
+                }
             }
+
 
             if(effectsEnabled)
             {
@@ -83,6 +97,15 @@ public class BaseLaneClass : MonoBehaviour {
                     DisableEffects();
             }
         }
+    }
+
+    public void DamageMobs(int damage)
+    {
+        activeMobs -= damage;
+        gameManager.DropGold(damage);
+
+        if (activeMobs < 0)
+            activeMobs = 0;
     }
 
     public void ResetStats()
@@ -133,6 +156,10 @@ public class BaseLaneClass : MonoBehaviour {
         currentDodge = baseDodge * dodgeModifier;
 
         currentSpeed = baseSpeed / attackSpeedModifier;
+
+        laneUI.UpdateCurrencyValues(GameManager.CURRENCY.GOLD, GetUpgradeLevel() * 100);
+        laneUI.UpdateValues(GetSingleHealth());
+        laneUI.LevelUp(GetUpgradeLevel());
     }
 
     public void Employ()
@@ -145,6 +172,9 @@ public class BaseLaneClass : MonoBehaviour {
         currentHealth += baseHealth * healthModifier;
 
         currentDamage = (baseDamage * damageModifier) * characterCount;
+
+        laneUI.UpdateCurrencyValues(GameManager.CURRENCY.INFLUENCE, GetCharacterCount() * 200);
+        laneUI.CharacterCountUp();
     }
 
     public int GetCharacterCount()
@@ -162,7 +192,7 @@ public class BaseLaneClass : MonoBehaviour {
         return singleHealth;
     }
     
-    public bool Damage(float damage)
+    public void Damage(float damage)
     {
         if (isAlive)
         {
@@ -176,19 +206,15 @@ public class BaseLaneClass : MonoBehaviour {
                 currentHealth -= damage;
 
                 //Update Lane UI
+                CheckHealth();
 
-                //CheckHealth();
-                //CheckLaneStatus();
-
-                return true;
+                laneUI.UpdateValues(GetSingleHealth());
             }
             else
             {
                 Debug.Log("Lane Dodged!");
-                return false;
             }
         }
-        return false;
 
     }
 
@@ -198,13 +224,16 @@ public class BaseLaneClass : MonoBehaviour {
             activeMobs += mobCount;
     }
 
-    public bool CheckHealth()
+    public void CheckHealth()
     {
-     characterCount--;
-     singleHealth = baseHealth * healthModifier;
-     currentDamage = (baseDamage * damageModifier) * characterCount;
+        if (singleHealth <= 0)
+        {
+            characterCount--;
+            singleHealth = baseHealth * healthModifier;
+            currentDamage = (baseDamage * damageModifier) * characterCount;
 
-     return CheckLaneStatus();
+            laneUI.CharacterKilled(CheckLaneStatus());
+        }
     }
 
     public bool CheckLaneStatus()
@@ -243,6 +272,8 @@ public class BaseLaneClass : MonoBehaviour {
 
         currentSpeed = baseSpeed / attackSpeedModifier;
 
+        laneUI.NewValues(GetSingleHealth());
+        
         isAlive = true;        
     }
 
@@ -329,6 +360,11 @@ public class BaseLaneClass : MonoBehaviour {
 
     private void OnMouseDown()
     {
-        Ability();
+        Debug.Log("Ability Used");
+        if (!abilityCooldown)
+        {
+            Ability();
+            abilityCooldown = true;
+        }
     }
 }

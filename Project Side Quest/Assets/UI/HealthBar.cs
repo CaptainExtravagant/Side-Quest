@@ -12,7 +12,7 @@ public class HealthBar : MonoBehaviour {
     protected Text currentText;
     Text maxText;
     
-    public virtual void Init()
+    public void Init()
     {
         healthSlider = GetComponentInChildren<Slider>();
 
