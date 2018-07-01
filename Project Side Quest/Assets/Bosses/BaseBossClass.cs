@@ -7,6 +7,8 @@ public class BaseBossClass : MonoBehaviour {
     //Game Manager Variable
     protected GameManager gameManager;
 
+    protected string bossName;
+
     protected float baseHealth = 100;
     protected float healthModifier = 1.0f;
 
@@ -27,7 +29,7 @@ public class BaseBossClass : MonoBehaviour {
     protected float specialTime = 10;
     protected float specialModifier;
 
-    private float currentSpecial;
+    protected float currentSpecial;
 
     protected int targetLane;
 
@@ -70,6 +72,11 @@ public class BaseBossClass : MonoBehaviour {
         TakeDamage(10);
     }
 
+    public string GetBossName()
+    {
+        return bossName;
+    }
+
     public void SetModifiers(int level)
     {
         attackModifier += 0.2f * level;
@@ -96,12 +103,17 @@ public class BaseBossClass : MonoBehaviour {
         return maxHealth;
     }
 
+    public float GetSpecialTime()
+    {
+        return specialSpeed;
+    }
+
     public void SetGameManager(GameManager manager)
     {
         gameManager = manager;
     }
 
-    void SetTargetLane()
+    protected void SetTargetLane()
     {
         targetLane = Random.Range(0, 4);
     }
@@ -140,7 +152,7 @@ public class BaseBossClass : MonoBehaviour {
 
     virtual protected void SpecialAttack()
     {
-        SetTargetLane();
-        gameManager.LaneEffect(targetLane, damageEffect, currentSpecial);
+        gameManager.GetUIManager().GetBossUI().SpecialUsed();
+        SetTargetLane();        
     }
 }

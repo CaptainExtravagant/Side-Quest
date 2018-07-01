@@ -6,6 +6,8 @@ public class CursedBoss : BaseBossClass {
 
     public override void Init(GameManager manager)
     {
+        bossName = "Cursed Warrior";
+        
         baseAttack = 15;
 
         damageEffect = 2;
@@ -15,7 +17,7 @@ public class CursedBoss : BaseBossClass {
 
     protected override void SpecialAttack()
     {
-        //base.SpecialAttack();
+        base.SpecialAttack();
         gameManager.DamageLane(targetLane, baseAttack * 2 * attackModifier);
     }
 }

@@ -6,6 +6,8 @@ public class GorgonBoss : BaseBossClass {
 
     public override void Init(GameManager manager)
     {
+        bossName = "Vile Gorgon";
+
         attackSpeed = 3;
 
         damageEffect = 3;
@@ -16,5 +18,6 @@ public class GorgonBoss : BaseBossClass {
     protected override void SpecialAttack()
     {
         base.SpecialAttack();
+        gameManager.LaneEffect(targetLane, damageEffect, currentSpecial);
     }
 }

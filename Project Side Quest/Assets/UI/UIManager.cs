@@ -7,16 +7,19 @@ public class UIManager : MonoBehaviour {
 
     private GameManager manager;
 
+    private Canvas canvas;
+
     private Text influenceText;
     private Text goldText;
 
-    private HealthBar bossHealthBar;
+    private BossUI bossUI;
+
+    private SpecialBar mobTimer;
 
     private float bossCurrentHealth;
     private float bossMaxHealth;
 
     private int round = 0;
-    private Text roundText;
 
     private LaneUI warriorLane;
     private LaneUI wizardLane;
@@ -28,6 +31,8 @@ public class UIManager : MonoBehaviour {
     {
         manager = gameManager;
 
+        canvas = GetComponent<Canvas>();
+
         //Get Currency Texts
         influenceText = GetComponentsInChildren<Text>()[0];
         goldText = GetComponentsInChildren<Text>()[1];
@@ -35,13 +40,15 @@ public class UIManager : MonoBehaviour {
         influenceText.text = "0";
         goldText.text = "0";
 
-        //Get Boss Health Bar
-        bossHealthBar = GetComponentInChildren<HealthBar>();
-        bossHealthBar.Init();
+        //Get Boss UI
+        bossUI = GetComponentInChildren<BossUI>();
+        bossUI.Init();
 
-        //Get Round Text
-        roundText = GetComponentsInChildren<Text>()[5];
-
+        //Get Mob Timer
+        mobTimer = GetComponentsInChildren<SpecialBar>()[1];
+        mobTimer.Init();
+        mobTimer.NewBoss(manager.GetMobSpawnTime());
+        
         //Get Lanes
         warriorLane = GetComponentsInChildren<LaneUI>()[0];        
         wizardLane = GetComponentsInChildren<LaneUI>()[1];
@@ -120,6 +127,16 @@ public class UIManager : MonoBehaviour {
                 return warriorLane;
         }
     }
+    
+    public void ResetMobTimer()
+    {
+        mobTimer.ResetTimer();
+    }
+    
+    public BossUI GetBossUI()
+    {
+        return bossUI;
+    }
 
     public void LevelReset(int gold, int influence)
     {
@@ -139,20 +156,18 @@ public class UIManager : MonoBehaviour {
 
     public void UpdateBossCurrentHealth(float newHealth)
     {
-        bossHealthBar.UpdateValues(newHealth);
+        bossUI.BossDamaged(newHealth);
     }
 
-    public void NewBoss(float maxHealth)
+    public void NewBoss(float maxHealth, BaseBossClass bossClass)
     {
         round++;
-        roundText.text = round.ToString();
-
-        bossHealthBar.NewValues(maxHealth);
+        bossUI.NewBoss(round, bossClass);
     }
 
     public void NoBoss()
     {
-        bossHealthBar.NewValues(0);
+        bossUI.BossKilled();
     }
         
     public void ResetLane(int lane)
@@ -179,5 +194,12 @@ public class UIManager : MonoBehaviour {
                 rangerLane.ResetValues();
                 break;
         }
+    }
+
+    public void SpawnDamageNumber(float damage, Vector3 location)
+    {
+        GameObject number;
+        number = Instantiate(Resources.Load("UI/DamageNumber"), location, Quaternion.identity) as GameObject;
+        number.GetComponent<DamageNumber>().Init(damage);
     }
 }

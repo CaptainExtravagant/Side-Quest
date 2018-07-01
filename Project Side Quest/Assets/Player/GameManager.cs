@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     BaseBossClass activeBoss;
 
     float mobSpawnTime = 40;
-    float spawnTimer;
+    float spawnTimer = 0;
 
     float bossSpawnTime = 5;
     float bossSpawnTimer;
@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour {
         if(spawnTimer >= mobSpawnTime)
         {
             activeLanes[Random.Range(0, 4)].AddMobs(10 * (currentLevel + 1));
+            spawnTimer = 0;
+            uiManager.ResetMobTimer();
+            Debug.Log("Mobs Spawned");
         }
 
         if (!bossSpawned)
@@ -93,34 +96,34 @@ public class GameManager : MonoBehaviour {
         switch(Random.Range(0, 4))
         {
             case 0:
-                newBoss = Instantiate(Resources.Load("Bosses/ZombieBoss") as GameObject, new Vector3(0, 3, 0), Quaternion.identity);
+                newBoss = Instantiate(Resources.Load("Bosses/ZombieBoss") as GameObject, new Vector3(0, 2.5f, 0), Quaternion.identity);
                 activeBoss = newBoss.GetComponent<BaseBossClass>();
                 break;
 
             case 1:
-                newBoss = Instantiate(Resources.Load("Bosses/GorgonBoss") as GameObject, new Vector3(0, 3, 0), Quaternion.identity);
+                newBoss = Instantiate(Resources.Load("Bosses/GorgonBoss") as GameObject, new Vector3(0, 2.5f, 0), Quaternion.identity);
                 activeBoss = newBoss.GetComponent<BaseBossClass>();
                 break;
 
             case 2:
-                newBoss = Instantiate(Resources.Load("Bosses/SummonerBoss") as GameObject, new Vector3(0, 3, 0), Quaternion.identity);
+                newBoss = Instantiate(Resources.Load("Bosses/SummonerBoss") as GameObject, new Vector3(0, 2.5f, 0), Quaternion.identity);
                 activeBoss = newBoss.GetComponent<BaseBossClass>();
                 break;
 
             case 3:
-                newBoss = Instantiate(Resources.Load("Bosses/CursedBoss") as GameObject, new Vector3(0, 3, 0), Quaternion.identity);
+                newBoss = Instantiate(Resources.Load("Bosses/CursedBoss") as GameObject, new Vector3(0, 2.5f, 0), Quaternion.identity);
                 activeBoss = newBoss.GetComponent<BaseBossClass>();
                 break;
 
             default:
-                newBoss = Instantiate(Resources.Load("Bosses/ZombieBoss") as GameObject, new Vector3(0,3,0), Quaternion.identity);
+                newBoss = Instantiate(Resources.Load("Bosses/ZombieBoss") as GameObject, new Vector3(0, 2.5f,0), Quaternion.identity);
                 activeBoss = newBoss.GetComponent<BaseBossClass>();                
                 break;
         }
 
         activeBoss.Init(this);
 
-        uiManager.NewBoss((int)activeBoss.GetMaxHealth());
+        uiManager.NewBoss((int)activeBoss.GetMaxHealth(), activeBoss);
     }
 
     public UIManager GetUIManager()
@@ -131,6 +134,11 @@ public class GameManager : MonoBehaviour {
     public int GetCurrentLevel()
     {
         return currentLevel;
+    }
+
+    public float GetMobSpawnTime()
+    {
+        return mobSpawnTime;
     }
 
     public BaseBossClass GetCurrentBoss()
@@ -234,9 +242,9 @@ public class GameManager : MonoBehaviour {
         //Deal Damage
         if (activeLanes[lane].IsAlive())
         {
+            uiManager.SpawnDamageNumber(damage, activeLanes[lane].gameObject.transform.position);
             activeLanes[lane].Damage(damage);
-        }
-        
+        }   
     }
 
     public void AddMobs(int lane, int mobCount)
@@ -293,6 +301,7 @@ public class GameManager : MonoBehaviour {
         if (bossSpawned)
         {
             Debug.Log("Character Damage Boss");
+            uiManager.SpawnDamageNumber(damage, activeBoss.gameObject.transform.position);
             activeBoss.TakeDamage(damage);
         }
     }
