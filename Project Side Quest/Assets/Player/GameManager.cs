@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-
+        
     //List of Lanes
     private List<BaseLaneClass> activeLanes = new List<BaseLaneClass>();
     private int laneCount = 0;
@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
         INFLUENCE = 0,
         GOLD
     };
+
+    private bool gamePaused = false;
 
     private int influence = 0;
     private int gold = 0;
@@ -28,6 +30,17 @@ public class GameManager : MonoBehaviour {
     bool bossSpawned = true;
 
     UIManager uiManager;
+    AudioManager audioManager;
+
+    public void PauseGame(bool isPaused)
+    {
+        gamePaused = isPaused;
+    }
+
+    public bool IsGamePaused()
+    {
+        return gamePaused;
+    }
 
     private void Start()
     {
@@ -36,34 +49,39 @@ public class GameManager : MonoBehaviour {
 
     private void Update()
     {
-        spawnTimer += Time.deltaTime;
-
-        if(spawnTimer >= mobSpawnTime)
+        if (!gamePaused)
         {
-            activeLanes[Random.Range(0, 4)].AddMobs(10 * (currentLevel + 1));
-            spawnTimer = 0;
-            uiManager.ResetMobTimer();
-            Debug.Log("Mobs Spawned");
-        }
+            spawnTimer += Time.deltaTime;
 
-        if (!bossSpawned)
-        {
-            bossSpawnTimer += Time.deltaTime;
-            if (bossSpawnTimer >= bossSpawnTime)
+            if (spawnTimer >= mobSpawnTime)
             {
-                bossSpawned = true;
-                CreateBoss();
+                activeLanes[Random.Range(0, 4)].AddMobs(10 * (currentLevel + 1));
+                spawnTimer = 0;
+                uiManager.ResetMobTimer();
+                Debug.Log("Mobs Spawned");
+            }
+
+            if (!bossSpawned)
+            {
+                bossSpawnTimer += Time.deltaTime;
+                if (bossSpawnTimer >= bossSpawnTime)
+                {
+                    bossSpawned = true;
+                    CreateBoss();
+                }
             }
         }
     }
 
     void Init()
-    {
+    {    
         activeLanes.Clear();
         activeBoss = null;
 
         currentLevel = 0;
 
+        audioManager = GetComponent<AudioManager>();
+        audioManager.Init(this);
 
         //Spawn Lanes
         activeLanes.Add(Instantiate(Resources.Load("Characters/WarriorLane") as GameObject, new Vector3(0, -0.5f, 0), Quaternion.identity).GetComponent<BaseLaneClass>());
@@ -123,7 +141,7 @@ public class GameManager : MonoBehaviour {
 
         activeBoss.Init(this);
 
-        uiManager.NewBoss((int)activeBoss.GetMaxHealth(), activeBoss);
+        uiManager.NewBoss((int)activeBoss.GetMaxHealth(), activeBoss, currentLevel + 1);
     }
 
     public UIManager GetUIManager()
@@ -267,7 +285,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void ResetGame()
+    public void ResetGame()
     {
         Debug.Log("Game Lost, Resetting");
 
@@ -282,8 +300,8 @@ public class GameManager : MonoBehaviour {
             uiManager.ResetLane(i);
         }
 
-        gold /= 2;
-        influence /= 2;
+        gold = 0;
+        influence = 0;
 
         uiManager.LevelReset(gold, influence);
 
@@ -309,5 +327,15 @@ public class GameManager : MonoBehaviour {
     public void UpdateBossHealth()
     {
         uiManager.UpdateBossCurrentHealth(activeBoss.GetCurrentHealth());
+    }
+
+    public void MusicVolume(float volume)
+    {
+        audioManager.MusicVolume(volume);
+    }
+
+    public void SFXVolume(float volume)
+    {
+        audioManager.SFXVolume(volume);
     }
 }

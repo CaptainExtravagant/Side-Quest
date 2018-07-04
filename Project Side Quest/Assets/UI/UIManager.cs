@@ -9,6 +9,9 @@ public class UIManager : MonoBehaviour {
 
     private Canvas canvas;
 
+    private PauseMenu pauseMenu;
+    private Button pauseButton;
+
     private Text influenceText;
     private Text goldText;
 
@@ -27,11 +30,22 @@ public class UIManager : MonoBehaviour {
     private LaneUI clericLane;
     private LaneUI rangerLane;
 
+    bool damageNumbers = true;
+
     public void Init(GameManager gameManager)
     {
         manager = gameManager;
 
         canvas = GetComponent<Canvas>();
+
+        //Init Pause Menu
+        pauseMenu = GetComponentInChildren<PauseMenu>();
+        pauseMenu.Init(this);
+        pauseMenu.gameObject.SetActive(false);
+
+        //Get Pause Button
+        pauseButton = GetComponentInChildren<Button>();
+        pauseButton.onClick.AddListener(PauseGame);
 
         //Get Currency Texts
         influenceText = GetComponentsInChildren<Text>()[0];
@@ -159,9 +173,9 @@ public class UIManager : MonoBehaviour {
         bossUI.BossDamaged(newHealth);
     }
 
-    public void NewBoss(float maxHealth, BaseBossClass bossClass)
+    public void NewBoss(float maxHealth, BaseBossClass bossClass, int level)
     {
-        round++;
+        round = level;
         bossUI.NewBoss(round, bossClass);
     }
 
@@ -198,8 +212,52 @@ public class UIManager : MonoBehaviour {
 
     public void SpawnDamageNumber(float damage, Vector3 location)
     {
-        GameObject number;
-        number = Instantiate(Resources.Load("UI/DamageNumber"), location, Quaternion.identity) as GameObject;
-        number.GetComponent<DamageNumber>().Init(damage);
+        if (damageNumbers)
+        {
+            GameObject number;
+            number = Instantiate(Resources.Load("UI/DamageNumber"), location, Quaternion.identity) as GameObject;
+            number.GetComponent<DamageNumber>().Init(damage);
+        }
+    }
+
+    private void PauseGame()
+    {
+        pauseMenu.gameObject.SetActive(true);
+        manager.PauseGame(true);
+
+        mobTimer.StopTimer();
+        bossUI.GamePaused(true);
+    }
+
+    public void UnpauseGame()
+    {
+        pauseMenu.gameObject.SetActive(false);
+        manager.PauseGame(false);
+
+        mobTimer.StartTimer();
+        bossUI.GamePaused(false);
+    }
+
+    public void ResetGame()
+    {
+        UnpauseGame();
+        manager.ResetGame();
+    }
+
+    public void DamageNumbers(bool isEnabled)
+    {
+        damageNumbers = isEnabled;
+    }
+
+    public void VolumeChange(int slider, float newVolume)
+    {
+        if(slider == 0)
+        {
+            manager.MusicVolume(newVolume);
+        }
+        else
+        {
+            manager.SFXVolume(newVolume);
+        }
     }
 }

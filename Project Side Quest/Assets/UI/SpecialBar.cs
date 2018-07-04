@@ -61,4 +61,14 @@ public class SpecialBar : MonoBehaviour {
         currentTime = 0;
         timerSlider.value = 1;
     }
+
+    public void StopTimer()
+    {
+        timerActive = false;
+    }
+
+    public void StartTimer()
+    {
+        timerActive = true;
+    }
 }

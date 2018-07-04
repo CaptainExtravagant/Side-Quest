@@ -57,44 +57,47 @@ public class BaseLaneClass : MonoBehaviour {
 
     private void Update()
     {
-        if (isAlive)
+        if (gameManager.IsGamePaused() == false)
         {
-            if (!isFrozen)
+            if (isAlive)
             {
-                attackTimer += Time.deltaTime;
-
-                if (attackTimer >= currentSpeed)
+                if (!isFrozen)
                 {
-                    if (activeMobs > 0)
+                    attackTimer += Time.deltaTime;
+
+                    if (attackTimer >= currentSpeed)
                     {
-                        DamageMobs((int)currentDamage);
+                        if (activeMobs > 0)
+                        {
+                            DamageMobs((int)currentDamage);
+                        }
+                        else
+                        {
+                            gameManager.DamageBoss(currentDamage);
+                        }
+                        attackTimer = 0;
                     }
-                    else
+
+                    if (abilityCooldown)
                     {
-                        gameManager.DamageBoss(currentDamage);
+                        abilityTimer -= Time.deltaTime;
+                        laneUI.UpdateCooldown(abilityTimer / currentSpeed);
+                        if (abilityTimer <= 0)
+                        {
+                            abilityCooldown = false;
+                            abilityTimer = currentSpeed;
+                        }
                     }
-                    attackTimer = 0;
                 }
 
-                if (abilityCooldown)
+
+                if (effectsEnabled)
                 {
-                    abilityTimer -= Time.deltaTime;
-                    laneUI.UpdateCooldown(abilityTimer / currentSpeed);
-                    if (abilityTimer <= 0)
-                    {
-                        abilityCooldown = false;
-                        abilityTimer = currentSpeed;
-                    }
+                    effectTimer -= Time.deltaTime;
+
+                    if (effectTimer <= 0)
+                        DisableEffects();
                 }
-            }
-
-
-            if(effectsEnabled)
-            {
-                effectTimer -= Time.deltaTime;
-
-                if (effectTimer <= 0)
-                    DisableEffects();
             }
         }
     }

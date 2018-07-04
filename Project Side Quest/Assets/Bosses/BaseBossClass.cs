@@ -42,19 +42,22 @@ public class BaseBossClass : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        attackTimer += Time.deltaTime;
-        specialTimer += Time.deltaTime;
-
-        if(attackTimer >= attackSpeed)
+        if (gameManager.IsGamePaused() == false)
         {
-            AttackLane();
-            attackTimer = 0;
-        }
+            attackTimer += Time.deltaTime;
+            specialTimer += Time.deltaTime;
 
-        if(specialTimer >= specialSpeed)
-        {
-            SpecialAttack();
-            specialTimer = 0;
+            if (attackTimer >= attackSpeed)
+            {
+                AttackLane();
+                attackTimer = 0;
+            }
+
+            if (specialTimer >= specialSpeed)
+            {
+                SpecialAttack();
+                specialTimer = 0;
+            }
         }
 	}
 

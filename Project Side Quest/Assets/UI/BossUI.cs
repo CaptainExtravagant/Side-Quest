@@ -48,6 +48,18 @@ public class BossUI : MonoBehaviour {
         specialTimer.ResetTimer();
     }
 
+    public void GamePaused(bool isPaused)
+    {
+        if(isPaused)
+        {
+            specialTimer.StopTimer();
+        }
+        else
+        {
+            specialTimer.StartTimer();
+        }
+    }
+
     public void BossKilled()
     {
         bossName.text = "";
