@@ -7,6 +7,10 @@ public class BaseLaneClass : MonoBehaviour {
     protected GameManager gameManager;
     private LaneUI laneUI;
 
+    //Animation Variables
+    private Animator animator;
+    private int animationState = 0;
+
     private bool isAlive = true;
 
     private int characterCount = 1;
@@ -49,6 +53,9 @@ public class BaseLaneClass : MonoBehaviour {
     public virtual void Init(GameManager manager, LaneUI ui)
     {
         SetManager(manager);
+
+        animator = GetComponent<Animator>();
+
         laneUI = ui;
         SetStats();
         abilityTimer = currentSpeed;
@@ -73,6 +80,7 @@ public class BaseLaneClass : MonoBehaviour {
                         }
                         else
                         {
+                            animator.SetTrigger("Attack");
                             gameManager.DamageBoss(currentDamage);
                         }
                         attackTimer = 0;
@@ -202,6 +210,7 @@ public class BaseLaneClass : MonoBehaviour {
             //Dodge Chance
             if (Random.Range(0, 99) > currentDodge)
             {
+                animator.SetTrigger("Hit");
 
                 Debug.Log("Lane Damaged");
 
@@ -366,8 +375,10 @@ public class BaseLaneClass : MonoBehaviour {
         Debug.Log("Ability Used");
         if (!abilityCooldown)
         {
+            animator.SetTrigger("SP_Attack");
             Ability();
             abilityCooldown = true;
+            
         }
     }
 }

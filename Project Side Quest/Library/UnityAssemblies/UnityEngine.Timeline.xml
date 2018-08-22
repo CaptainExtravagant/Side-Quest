@@ -51,7 +51,7 @@
     </member>
     <member name="T:UnityEngine.Timeline.ActivationTrack.PostPlaybackState">
       <summary>
-        <para>Specify what state to leave the GameObject in after the Timeline has finished playing.</para>
+        <para>Specify what state the GameObject is set to after the Timeline has finished playing.</para>
       </summary>
     </member>
     <member name="F:UnityEngine.Timeline.ActivationTrack.PostPlaybackState.Active">
@@ -712,6 +712,16 @@
         <para>Is this track a subtrack?</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Timeline.TrackAsset.locked">
+      <summary>
+        <para>The local locked state of the track.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Timeline.TrackAsset.lockedInHierarchy">
+      <summary>
+        <para>The locked state of a track. (Read Only)</para>
+      </summary>
+    </member>
     <member name="P:UnityEngine.Timeline.TrackAsset.muted">
       <summary>
         <para>Mutes the track, excluding it from the generated PlayableGraph.</para>
@@ -785,6 +795,12 @@
         <para>Override this method to receive a callback before Unity serializes your track.</para>
       </summary>
     </member>
+    <member name="M:UnityEngine.Timeline.TrackAsset.OnCreateClip(UnityEngine.Timeline.TimelineClip)">
+      <summary>
+        <para>Called when a clip is created on a track. Use this method to set default values on a timeline clip, or on it's PlayableAsset.</para>
+      </summary>
+      <param name="clip">The timeline clip added to this track.</param>
+    </member>
     <member name="T:UnityEngine.Timeline.TrackAssetExtensions">
       <summary>
         <para>Extension methods for Track Assets.</para>
@@ -806,9 +822,39 @@
       <param name="asset">The track to asset.</param>
       <param name="group">The GroupTrack to assign the track to.</param>
     </member>
+    <member name="T:UnityEngine.Timeline.TrackBindingFlags">
+      <summary>
+        <para>Specify these options when using a binding type for a custom TrackAsset.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Timeline.TrackBindingFlags.All">
+      <summary>
+        <para>Specifies all options. This is the default.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Timeline.TrackBindingFlags.AllowCreateComponent">
+      <summary>
+        <para>Specifies the automatic creation of component types, when required.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Timeline.TrackBindingFlags.None">
+      <summary>
+        <para>Specifies no options.</para>
+      </summary>
+    </member>
     <member name="T:UnityEngine.Timeline.TrackBindingTypeAttribute">
       <summary>
         <para>Specifies the type of object that should be bound to a TrackAsset.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Timeline.TrackBindingTypeAttribute.flags">
+      <summary>
+        <para>Options related to the track binding.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Timeline.TrackBindingTypeAttribute.type">
+      <summary>
+        <para>The type of object that the track requires a binding to.</para>
       </summary>
     </member>
     <member name="T:UnityEngine.Timeline.TrackClipTypeAttribute">
