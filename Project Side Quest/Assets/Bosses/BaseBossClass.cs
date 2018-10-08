@@ -7,6 +7,8 @@ public class BaseBossClass : MonoBehaviour {
     //Game Manager Variable
     protected GameManager gameManager;
 
+    private Animator animator;
+
     protected string bossName;
 
     protected float baseHealth = 100;
@@ -49,12 +51,14 @@ public class BaseBossClass : MonoBehaviour {
 
             if (attackTimer >= attackSpeed)
             {
+                animator.SetTrigger("Attack");
                 AttackLane();
                 attackTimer = 0;
             }
 
             if (specialTimer >= specialSpeed)
             {
+                animator.SetTrigger("SP_Attack");
                 SpecialAttack();
                 specialTimer = 0;
             }
@@ -64,6 +68,8 @@ public class BaseBossClass : MonoBehaviour {
     public virtual void Init(GameManager manager)
     {
         SetGameManager(manager);
+
+        animator = GetComponent<Animator>();
 
         SetModifiers(gameManager.GetCurrentLevel());
         SetStats();

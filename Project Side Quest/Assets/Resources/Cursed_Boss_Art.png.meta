@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: e210439288a1a124da4df31f50632b0e
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Cursed_Boss_Attack_1
+    21300002: Cursed_Boss_Attack_2
+    21300004: Cursed_Boss_Attack_3
+    21300006: Cursed_Boss_SP_Attack_1
+    21300008: Cursed_Boss_SP_Attack_2
+    21300010: Cursed_Boss_SP_Attack_3
+    21300012: Cursed_Boss_Idle
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -115,11 +122,151 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Cursed_Boss_Attack_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e8ee932f36d4a34d822ff33c921bd4c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cursed_Boss_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 256
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eef5417c6265bab48b8cd8c561108e46
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cursed_Boss_Attack_3
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 256
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee96c78b49a102c43a4d2f39868b22b6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cursed_Boss_SP_Attack_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 148848caf0d280c4f99ff115784cb6fe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cursed_Boss_SP_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 128
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c840823151cdab343a91f559ed52417b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cursed_Boss_SP_Attack_3
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 128
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b7397d503967b34a84f01131dfb11f1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cursed_Boss_Idle
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 109
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2de005cb638c4be4e934386906edd75a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 51b81fbdf9e30a34693b8cc3a1966f51
+    spriteID: 47cfb4dfe83cadc4b9a7ba4466d12d56
     vertices: []
     indices: 
     edges: []
