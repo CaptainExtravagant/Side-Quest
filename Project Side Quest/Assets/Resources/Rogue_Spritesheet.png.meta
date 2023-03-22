@@ -1,19 +1,39 @@
 fileFormatVersion: 2
 guid: 545e679665c74c841a809278438e8071
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Rogue_Attack_1
-    21300002: Rogue_Attack_2
-    21300004: Rogue_Attack_3
-    21300006: Rogue_Attack_4
-    21300008: Rogue_SP_Attack_1
-    21300010: Rogue_SP_Attack_2
-    21300012: Rogue_SP_Attack_3
-    21300014: Rogue_SP_Attack_4
-    21300016: Rogue_Hit
-    21300018: Rogue_Idle
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Rogue_Attack_1
+  - first:
+      213: 21300002
+    second: Rogue_Attack_2
+  - first:
+      213: 21300004
+    second: Rogue_Attack_3
+  - first:
+      213: 21300006
+    second: Rogue_Attack_4
+  - first:
+      213: 21300008
+    second: Rogue_SP_Attack_1
+  - first:
+      213: 21300010
+    second: Rogue_SP_Attack_2
+  - first:
+      213: 21300012
+    second: Rogue_SP_Attack_3
+  - first:
+      213: 21300014
+    second: Rogue_SP_Attack_4
+  - first:
+      213: 21300016
+    second: Rogue_Hit
+  - first:
+      213: 21300018
+    second: Rogue_Idle
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -33,6 +53,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -41,9 +63,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -64,11 +86,16 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -79,7 +106,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -90,7 +118,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -101,7 +130,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -112,7 +142,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -123,6 +154,19 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -142,6 +186,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 3376ba541c68885408e9f47271bab7a9
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -162,6 +207,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 43151002245b17a4ca7fc69e4a161c25
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -182,6 +228,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5f4208315ead54b48b683914021a9329
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -202,6 +249,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0a793579d4a37ee478849180051df07b
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -222,6 +270,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: d80b9e5b00d76484c952e87109d7f67d
+      internalID: 21300008
       vertices: []
       indices: 
       edges: []
@@ -242,6 +291,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 55ebba558f16ab942885bd4c8a868c76
+      internalID: 21300010
       vertices: []
       indices: 
       edges: []
@@ -262,6 +312,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: b8553b7e027963f4e9f56d6e12f15f79
+      internalID: 21300012
       vertices: []
       indices: 
       edges: []
@@ -282,6 +333,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 46547f57242298f49aebd79340ba401f
+      internalID: 21300014
       vertices: []
       indices: 
       edges: []
@@ -302,6 +354,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 959ae3dfe0522da46b75a963de7e3001
+      internalID: 21300016
       vertices: []
       indices: 
       edges: []
@@ -322,6 +375,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 88aaf0ded82a42e49ad7e940ae1f2565
+      internalID: 21300018
       vertices: []
       indices: 
       edges: []
@@ -330,10 +384,23 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: e6813877018bcc943b0626ab5ccf97ec
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Rogue_Idle: 21300018
+      Rogue_Attack_1: 21300000
+      Rogue_SP_Attack_4: 21300014
+      Rogue_SP_Attack_2: 21300010
+      Rogue_Hit: 21300016
+      Rogue_Attack_4: 21300006
+      Rogue_Attack_2: 21300002
+      Rogue_Attack_3: 21300004
+      Rogue_SP_Attack_3: 21300012
+      Rogue_SP_Attack_1: 21300008
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
